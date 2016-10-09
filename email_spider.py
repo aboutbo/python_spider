@@ -3,6 +3,8 @@ import re
 import requests
 import sys
 reload(sys)
+
+
 html1 = requests.get('http://web.xidian.edu.cn/')
 html1.encoding = 'utf-8'
 #print html1.text
@@ -34,15 +36,33 @@ for per_xy_url in xy_url:
         html3 = requests.get(temp_t_url)
         html3.encoding = 'utf-8'
         email = re.search(u'电子邮箱：(.*?)@xidian.edu.cn',html3.text,re.S)
+        #print email
         if email :
             temp_email = email.group(1) + '@xidian.edu.cn\n'
+            email1 = re.search('mailto:(.*?)@xidian.edu.cn\n',temp_email,re.S)
             f1.write(per_t_name.encode('utf-8') + '\t')
+            if email1 :
+                temp_email = email1.group(1) + '@xidian.edu.cn\n'
+
+            # email1 = re.search('&nbsp;(.*?)@xidian.edu.cn',temp_email,re.S)
+            # if email1 :
+            #     temp_email = email1.group(1) + '@xidian.edu.cn\n'
+
             f1.write(temp_email.encode('utf-8'))
         else :
             email = re.search(u'电子邮箱：(.*?)@mail.xidian.edu.cn',html3.text,re.S)
             if email :
                 temp_email = email.group(1) + '@mail.xidian.edu.cn\n'
                 f2.write(per_t_name.encode('utf-8') + '\t')
+
+                email1 = re.search('mailto:(.*?)@mail.xidian.edu.cn',temp_email,re.S)
+                if email1 :
+                    temp_email = email1.group(1) + '@mail.xidian.edu.cn\n'
+
+                # email1 = re.search('&nbsp;(.*?)@mail.xidian.edu.cn',temp_email,re.S)
+                # if email1 :
+                #     temp_email = email1.group(1) + '@mail.xidian.edu.cn\n'
+
                 f2.write(temp_email.encode('utf-8'))
 f1.close()
 f2.close()
